@@ -2,16 +2,15 @@
 export default {
   data() {
     return {
-      num: 1,
-      users: []
+      numberOfUsers: 1,
+      randomUsers: []
     }
   },
   methods: {
-    async getData() {
-      let resp = await fetch(`http://localhost:5034/users/${this.num}`);
-      const json = await resp.json();
-      console.log(json)
-      this.users = json.results ?? [];
+    async getRandomUsersData() {
+      let resp = await fetch(`http://localhost:5034/users/${this.numberOfUsers}`);
+      const jsonResponse = await resp.json();
+      this.randomUsers = jsonResponse.results ?? [];
     }
   }
 }
@@ -19,11 +18,11 @@ export default {
 
 <template>
   <form @submit.prevent>
-    <input type="number" v-model="num">
-    <button @click="getData">Pobierz</button>
+    <input type="number" v-model="numberOfUsers" min="1">
+    <button @click="getRandomUsersData">Pobierz</button>
   </form>
 
-  <div v-if="users.length > 0">
+  <div v-if="randomUsers.length > 0">
     <table>
       <thead>
         <tr>
@@ -33,7 +32,7 @@ export default {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" v-bind:key="user.email">
+        <tr v-for="user in randomUsers" v-bind:key="user.email">
           <td>{{ user.name.first }}</td>
           <td>{{ user.name.last }}</td>
           <td>{{ user.email }}</td>
